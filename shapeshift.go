@@ -105,15 +105,15 @@ type NewFixedTransactionResponse struct {
 	OrderID          string  `json:"orderId"`
 	Pair             string  `json:"pair,omitempty"`
 	Withdrawal       string  `json:"withdrawal"`
-	WithdrawalAmount string  `json:"withdrawalAmount"`
+	WithdrawalAmount decimal.Decimal  `json:"withdrawalAmount"`
 	Deposit          string  `json:"deposit"`
-	DepositAmount    string  `json:"depositAmount"`
+	DepositAmount    decimal.Decimal  `json:"depositAmount"`
 	Expiration       int64   `json:"expiration"`
-	QuotedRate       string  `json:"quotedRate"`
+	QuotedRate       decimal.Decimal  `json:"quotedRate"`
 	MaxLimit         decimal.Decimal `json:"maxLimit"`
 	ReturnAddress    string  `json:"returnAddress"`
 	APIPubKey        string  `json:"apiPubKey"`
-	MinerFee         string  `json:"minerFee"`
+	MinerFee         decimal.Decimal  `json:"minerFee"`
 	Error
 }
 

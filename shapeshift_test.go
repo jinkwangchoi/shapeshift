@@ -233,7 +233,7 @@ func TestNewFixedTransaction(t *testing.T) {
 		t.Fail()
 	}
 
-	if response.WithdrawalAmount != "0.25" {
+	if response.WithdrawalAmount.Cmp(decimal.New(25, -2)) != 0{
 		t.Fail()
 	}
 
