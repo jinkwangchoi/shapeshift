@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+var timeOut = 10 * time.Second
+
 var apiUrl string = "https://shapeshift.io"
 
 type Pair struct {
@@ -321,7 +323,7 @@ func DoPostHttp(method string, apimethod string, data interface{}) ([]byte, erro
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{Timeout: 5 * time.Second}
+	client := &http.Client{Timeout: timeOut}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -337,7 +339,7 @@ func DoHttp(method string, apimethod string, url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	client := &http.Client{Timeout: 5 * time.Second}
+	client := &http.Client{Timeout: timeOut}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
