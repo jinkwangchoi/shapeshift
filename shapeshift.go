@@ -321,7 +321,7 @@ func DoPostHttp(method string, apimethod string, data interface{}) ([]byte, erro
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
+	client := &http.Client{Timeout:5*time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
