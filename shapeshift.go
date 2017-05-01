@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"github.com/shopspring/decimal"
+	"time"
 )
 
 var apiUrl string = "https://shapeshift.io"
@@ -336,7 +337,7 @@ func DoHttp(method string, apimethod string, url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	client := &http.Client{}
+	client := &http.Client{Timeout:5*time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
