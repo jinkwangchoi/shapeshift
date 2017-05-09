@@ -3,12 +3,14 @@ package shapeshift
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/shopspring/decimal"
 	"io/ioutil"
 	"net/http"
-	"github.com/shopspring/decimal"
 	"time"
 	"strconv"
 )
+
+var timeOut = 10 * time.Second
 
 var apiUrl string = "https://shapeshift.io"
 
@@ -17,19 +19,19 @@ type Pair struct {
 }
 
 type RateResponse struct {
-	Pair string `json:"pair,omitempty"`
+	Pair string          `json:"pair,omitempty"`
 	Rate decimal.Decimal `json:"rate"`
 	Error
 }
 
 type LimitResponse struct {
-	Pair  string `json:"pair,omitempty"`
+	Pair  string          `json:"pair,omitempty"`
 	Limit decimal.Decimal `json:"limit"`
 	Error
 }
 
 type MarketInfoResponse struct {
-	Pair     string  `json:"pair,omitempty"`
+	Pair     string          `json:"pair,omitempty"`
 	Rate     decimal.Decimal `json:"rate,omitempty"`
 	Limit    decimal.Decimal `json:"limit,omitempty"`
 	Min      decimal.Decimal `json:"min,omitempty"`
@@ -38,22 +40,22 @@ type MarketInfoResponse struct {
 }
 
 type RecentTranxResponse []struct {
-	CurIn     string  `json:"curIn"`
-	CurOut    string  `json:"curOut"`
+	CurIn     string          `json:"curIn"`
+	CurOut    string          `json:"curOut"`
 	Timestamp decimal.Decimal `json:"timestamp"`
 	Amount    decimal.Decimal `json:"amount"`
 	Error
 }
 
 type DepositStatusResponse struct {
-	Status       string  `json:"status"`
-	Address      string  `json:"address"`
-	Withdraw     string  `json:"withdraw,omitempty"`
+	Status       string          `json:"status"`
+	Address      string          `json:"address"`
+	Withdraw     string          `json:"withdraw,omitempty"`
 	IncomingCoin decimal.Decimal `json:"incomingCoin,omitempty"`
-	IncomingType string  `json:"incomingType,omitempty"`
-	OutgoingCoin string  `json:"outgoingCoin,omitempty"`
-	OutgoingType string  `json:"outgoingType,omitempty"`
-	Transaction  string  `json:"transaction,omitempty"`
+	IncomingType string          `json:"incomingType,omitempty"`
+	OutgoingCoin string          `json:"outgoingCoin,omitempty"`
+	OutgoingType string          `json:"outgoingType,omitempty"`
+	Transaction  string          `json:"transaction,omitempty"`
 	Error
 }
 
@@ -77,12 +79,12 @@ type Address struct {
 }
 
 type New struct {
-	Pair        string  `json:"pair,omitempty"`
-	ToAddress   string  `json:"withdrawal"`
-	FromAddress string  `json:"returnAddress,omitempty"`
-	DestTag     string  `json:"destTag,omitempty"`
-	RsAddress   string  `json:"rsAddress,omitempty"`
-	ApiKey      string  `json:"apiKey,omitempty"`
+	Pair        string          `json:"pair,omitempty"`
+	ToAddress   string          `json:"withdrawal"`
+	FromAddress string          `json:"returnAddress,omitempty"`
+	DestTag     string          `json:"destTag,omitempty"`
+	RsAddress   string          `json:"rsAddress,omitempty"`
+	ApiKey      string          `json:"apiKey,omitempty"`
 	Amount      decimal.Decimal `json:"amount,omitempty"`
 }
 
@@ -116,18 +118,18 @@ func (t *SSTimestamp) UnmarshalJSON(buf []byte) error {
 }
 
 type NewFixedTransactionResponse struct {
-	OrderID          string  `json:"orderId"`
-	Pair             string  `json:"pair,omitempty"`
-	Withdrawal       string  `json:"withdrawal"`
-	WithdrawalAmount decimal.Decimal  `json:"withdrawalAmount"`
-	Deposit          string  `json:"deposit"`
-	DepositAmount    decimal.Decimal  `json:"depositAmount"`
-	Expiration       SSTimestamp   `json:"expiration"`
-	QuotedRate       decimal.Decimal  `json:"quotedRate"`
+	OrderID          string          `json:"orderId"`
+	Pair             string          `json:"pair,omitempty"`
+	Withdrawal       string          `json:"withdrawal"`
+	WithdrawalAmount decimal.Decimal `json:"withdrawalAmount"`
+	Deposit          string          `json:"deposit"`
+	DepositAmount    decimal.Decimal `json:"depositAmount"`
+	Expiration       SSTimestamp           `json:"expiration"`
+	QuotedRate       decimal.Decimal `json:"quotedRate"`
 	MaxLimit         decimal.Decimal `json:"maxLimit"`
-	ReturnAddress    string  `json:"returnAddress"`
-	APIPubKey        string  `json:"apiPubKey"`
-	MinerFee         decimal.Decimal  `json:"minerFee"`
+	ReturnAddress    string          `json:"returnAddress"`
+	APIPubKey        string          `json:"apiPubKey"`
+	MinerFee         decimal.Decimal `json:"minerFee"`
 	Error
 }
 
@@ -157,16 +159,16 @@ type Error struct {
 }
 
 type Transaction struct {
-	InputTXID      string  `json:"inputTXID"`
-	InputAddress   string  `json:"inputAddress"`
-	InputCurrency  string  `json:"inputCurrency,omitempty"`
+	InputTXID      string          `json:"inputTXID"`
+	InputAddress   string          `json:"inputAddress"`
+	InputCurrency  string          `json:"inputCurrency,omitempty"`
 	InputAmount    decimal.Decimal `json:"inputAmount,omitempty"`
-	OutputTXID     string  `json:"outputTXID,omitempty"`
-	OutputAddress  string  `json:"outputAddress,omitempty"`
-	OutputCurrency string  `json:"outputCurrency,omitempty"`
-	OutputAmount   string  `json:"outputAmount,omitempty"`
-	ShiftRate      string  `json:"shiftRate,omitempty"`
-	Status         string  `json:"status,omitempty"`
+	OutputTXID     string          `json:"outputTXID,omitempty"`
+	OutputAddress  string          `json:"outputAddress,omitempty"`
+	OutputCurrency string          `json:"outputCurrency,omitempty"`
+	OutputAmount   string          `json:"outputAmount,omitempty"`
+	ShiftRate      string          `json:"shiftRate,omitempty"`
+	Status         string          `json:"status,omitempty"`
 }
 
 type API struct {
@@ -328,14 +330,14 @@ func (i API) ListTransactions() ([]Transaction, error) {
 func DoPostHttp(method string, apimethod string, data interface{}) ([]byte, error) {
 	new, err := json.Marshal(data)
 	if err != nil {
-		return nil, err	
+		return nil, err
 	}
 	req, err := http.NewRequest(method, apiUrl+"/"+apimethod, bytes.NewBuffer(new))
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
+	client := &http.Client{Timeout: timeOut}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -351,7 +353,7 @@ func DoHttp(method string, apimethod string, url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	client := &http.Client{}
+	client := &http.Client{Timeout: timeOut}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
