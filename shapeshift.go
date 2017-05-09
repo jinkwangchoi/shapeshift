@@ -6,8 +6,8 @@ import (
 	"github.com/shopspring/decimal"
 	"io/ioutil"
 	"net/http"
-	"time"
 	"strconv"
+	"time"
 )
 
 var timeOut = 10 * time.Second
@@ -124,7 +124,7 @@ type NewFixedTransactionResponse struct {
 	WithdrawalAmount decimal.Decimal `json:"withdrawalAmount"`
 	Deposit          string          `json:"deposit"`
 	DepositAmount    decimal.Decimal `json:"depositAmount"`
-	Expiration       SSTimestamp           `json:"expiration"`
+	Expiration       SSTimestamp     `json:"expiration"`
 	QuotedRate       decimal.Decimal `json:"quotedRate"`
 	MaxLimit         decimal.Decimal `json:"maxLimit"`
 	ReturnAddress    string          `json:"returnAddress"`
