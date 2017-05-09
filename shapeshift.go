@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"github.com/shopspring/decimal"
+	"time"
+	"strconv"
 )
 
 var apiUrl string = "https://shapeshift.io"
@@ -100,6 +102,19 @@ type FixedTransactionResponse struct {
 	Error
 }
 
+type SSTimestamp struct {
+	time.Time
+}
+
+func (t *SSTimestamp) UnmarshalJSON(buf []byte) error {
+	unixtime, err := strconv.ParseInt(string(buf), 10, 64)
+	if err != nil {
+		return err
+	}
+	t.Time = time.Unix(unixtime/1000, unixtime%1000*int64(time.Millisecond))
+	return nil
+}
+
 type NewFixedTransactionResponse struct {
 	OrderID          string  `json:"orderId"`
 	Pair             string  `json:"pair,omitempty"`
@@ -107,7 +122,7 @@ type NewFixedTransactionResponse struct {
 	WithdrawalAmount decimal.Decimal  `json:"withdrawalAmount"`
 	Deposit          string  `json:"deposit"`
 	DepositAmount    decimal.Decimal  `json:"depositAmount"`
-	Expiration       int64   `json:"expiration"`
+	Expiration       SSTimestamp   `json:"expiration"`
 	QuotedRate       decimal.Decimal  `json:"quotedRate"`
 	MaxLimit         decimal.Decimal `json:"maxLimit"`
 	ReturnAddress    string  `json:"returnAddress"`
@@ -313,7 +328,7 @@ func (i API) ListTransactions() ([]Transaction, error) {
 func DoPostHttp(method string, apimethod string, data interface{}) ([]byte, error) {
 	new, err := json.Marshal(data)
 	if err != nil {
-		return nil, err
+		return nil, err	
 	}
 	req, err := http.NewRequest(method, apiUrl+"/"+apimethod, bytes.NewBuffer(new))
 	if err != nil {
