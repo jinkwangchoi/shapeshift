@@ -280,14 +280,14 @@ func (n New) Shift() (*NewTransactionResponse, error) {
 	return &g, err
 }
 
-func (n New) FixedShift() (*NewFixedTransactionResponse, error) {
+func (n New) FixedShift() (*FixedTransactionResponse, error) {
 	r, err := DoPostHttp("POST", "sendamount", n)
 	if err != nil {
 		return nil, err
 	}
 	var g FixedTransactionResponse
 	err = json.Unmarshal(r, &g)
-	return &g.Response, err
+	return &g, err
 }
 
 func (n Address) Cancel() (*CancelResponse, error) {

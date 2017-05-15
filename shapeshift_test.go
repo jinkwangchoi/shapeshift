@@ -1,8 +1,8 @@
 package shapeshift
 
 import (
-	"testing"
 	"github.com/shopspring/decimal"
+	"testing"
 )
 
 var newSendToAddress string
@@ -215,29 +215,29 @@ func TestNewFixedTransaction(t *testing.T) {
 
 	if response.isOk() {
 
-		t.Log("Pair: ", response.Pair)
-		t.Log("Quoted Rate: ", response.QuotedRate)
-		t.Log("Deposit Address: ", response.Deposit)
-		t.Log("Deposit Amount: ", response.DepositAmount)
-		t.Log("Withdraw Amount: ", response.WithdrawalAmount)
-		t.Log("Withdraw Address: ", response.Withdrawal)
-		t.Log("Expiration: ", response.Expiration)
+		t.Log("Pair: ", response.Response.Pair)
+		t.Log("Quoted Rate: ", response.Response.QuotedRate)
+		t.Log("Deposit Address: ", response.Response.Deposit)
+		t.Log("Deposit Amount: ", response.Response.DepositAmount)
+		t.Log("Withdraw Amount: ", response.Response.WithdrawalAmount)
+		t.Log("Withdraw Address: ", response.Response.Withdrawal)
+		t.Log("Expiration: ", response.Response.Expiration)
 
 	} else {
 		t.Log(response.ErrorMsg())
 	}
 
-	newSendToAddress2 = response.Deposit
+	newSendToAddress2 = response.Response.Deposit
 
-	if response.Withdrawal != "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh" {
+	if response.Response.Withdrawal != "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh" {
 		t.Fail()
 	}
 
-	if response.WithdrawalAmount.Cmp(decimal.New(25, -2)) != 0{
+	if response.Response.WithdrawalAmount.Cmp(decimal.New(25, -2)) != 0 {
 		t.Fail()
 	}
 
-	if response.Pair != "eth_btc" {
+	if response.Response.Pair != "eth_btc" {
 		t.Fail()
 	}
 }
