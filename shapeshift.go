@@ -47,7 +47,7 @@ type RecentTranxResponse []struct {
 	Error
 }
 
-type DepositStatusResponse struct {
+type DepositStatnotInProgressusResponse struct {
 	Status       string          `json:"status"`
 	Address      string          `json:"address"`
 	Withdraw     string          `json:"withdraw,omitempty"`
