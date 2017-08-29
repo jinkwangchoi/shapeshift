@@ -33,7 +33,7 @@ type LimitResponse struct {
 type MarketInfoResponse struct {
 	Pair     string          `json:"pair,omitempty"`
 	Rate     decimal.Decimal `json:"rate,omitempty"`
-	Limit    decimal.Decimal `json:"limit,omitempty"`
+	MaxLimit decimal.Decimal `json:"maxLimit,omitempty"`
 	Min      decimal.Decimal `json:"min,omitempty"`
 	MinerFee decimal.Decimal `json:"minerFee,omitempty"`
 	Error
